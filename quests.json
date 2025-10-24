@@ -1,0 +1,12 @@
+[
+  {
+    "id": "tx-base",
+    "title": "Make at least one transaction on Base network",
+    "type": "tx"
+  },
+  {
+    "id": "cast-gm",
+    "title": "Post a cast with the #gm tag on Farcaster",
+    "type": "cast"
+  }
+]
