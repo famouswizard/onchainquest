@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚔️ Onchain Quest</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0e0e10;
+      color: #fff;
+      text-align: center;
+      padding: 40px;
+    }
+    button {
+      background: #5f38ff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #724aff;
+    }
+    .wallet {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #a0a0a0;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Onchain Quest</h1>
+  <p>Complete quests, earn rewards, and prove your onchain power!</p>
+
+  <button id="connectWallet">🔗 Connect Wallet</button>
+  <div id="walletInfo" class="wallet"></div>
+
+  <div id="quests" style="display:none;">
+    <h3>🎯 Today's Quests</h3>
+    <ul id="questList"></ul>
+  </div>
+
+  <script type="module">
+    import { createWeb3Modal, defaultWagmiConfig } from 'https://esm.sh/@web3modal/wagmi';
+    import { mainnet, base } from 'https://esm.sh/viem/chains';
+    import { getAccount } from 'https://esm.sh/@wagmi/core';
+
+    const projectId = 'YOUR_WALLETCONNECT_PROJECT_ID';
+    const metadata = {
+      name: 'Onchain Quest',
+      description: 'Daily onchain quests for Farcaster users',
+      url: 'https://yourdomain.xyz',
+      icons: ['https://yourdomain.xyz/icon.png'],
+    };
+
+    const chains = [base, mainnet];
+    const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+    const modal = createWeb3Modal({ wagmiConfig, projectId });
+
+    const connectButton = document.getElementById('connectWallet');
+    const walletInfo = document.getElementById('walletInfo');
+    const questList = document.getElementById('questList');
+    const questContainer = document.getElementById('quests');
+
+    let address = null;
+
+    connectButton.addEventListener('click', async () => {
+      try {
+        await modal.open();
+        const account = getAccount();
+        if (!account || !account.address) {
+          walletInfo.textContent = '❌ Wallet connection failed.';
+          return;
+        }
+        address = account.address;
+        walletInfo.textContent = `✅ Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
+        connectButton.style.display = 'none';
+        questContainer.style.display = 'block';
+
+        const res = await fetch('/api/quests');
+        const data = await res.json();
+        data.forEach((q) => {
+          const li = document.createElement('li');
+          li.innerHTML = `${q.title} <button onclick="verifyQuest('${q.id}')">Verify</button>`;
+          questList.appendChild(li);
+        });
+      } catch (err) {
+        console.error(err);
+        walletInfo.textContent = '❌ Error connecting wallet';
+      }
+    });
+
+    window.verifyQuest = async (questId) => {
+      const res = await fetch(`/api/verify/${questId}?address=${address}`);
+      const data = await res.json();
+      alert(data.message);
+    };
+  </script>
+</body>
+</html>
