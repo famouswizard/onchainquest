@@ -13,7 +13,7 @@ Each quest has verifiable proof — either **onchain** (via BaseScan) or **socia
 
 - 🔗 **WalletConnect integration**
 - 🧩 **Daily Quests**
-- ⚙️ **Verification** via BaseScan + Neynar
+- ⚙️ **Verification** via Basescan + Neynar
 - 🪙 **Future rewards** ($DEGEN)
 - 💬 **Farcaster-ready UI**
 
