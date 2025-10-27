@@ -1,7 +1,7 @@
 # ⚔️ Onchain Quest
 
 **Onchain Quest** is a Farcaster miniapp that gamifies onchain and social activity.
-Complete daily quests, verify your actions onchain, and earn digital rewards — all directly from your wallet.
+Complete daily quests, verify your actions onchain, and earn digital rewards — all directly from your Farcaster wallet.
 
 ## 🌍 Overview
 
